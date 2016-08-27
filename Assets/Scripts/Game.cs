@@ -2,6 +2,9 @@
 
 public class Game
 {
+    public delegate void OnPlayerDictUpdated(GlyphDictionary dict);
+    public static event OnPlayerDictUpdated onPlayerDictUpdated;
+
     // Singleton implementation
     private static Game sm_instance;
     public static Game Instance
@@ -23,6 +26,13 @@ public class Game
     public void InitPuzzle()
     {
         currentPuzzle = new Puzzle("foobar");
+    }
+
+    public void setPlayerGlyph(char letter, Glyph glyph)
+    {
+        playerDict.set(letter, glyph);
+
+        onPlayerDictUpdated(playerDict);
     }
 
     public GlyphDictionary playerDict { get; private set; }

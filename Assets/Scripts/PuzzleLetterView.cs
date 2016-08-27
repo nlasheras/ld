@@ -1,23 +1,38 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PuzzleLetterView : MonoBehaviour {
-
-    Vector3 m_startPosition;
-
+public class PuzzleLetterView : MonoBehaviour
+{
     public LetterPanelView m_letterPanel;
     
-	void Start () {
+	void Start()
+    {
         m_startPosition = transform.position;
 	}
-	
-	void Update () {
-	
-	}
 
+    public void Init(Glyph glyph)
+    {
+        m_glyph = glyph;
+
+        LetterBoxView lbv = GetComponent<LetterBoxView>();
+        lbv.SetLetter(GlyphDictionary.UNKNOWN_GLYPH_CHAR);
+    }
+
+    public void UpdateWithDictionary(GlyphDictionary dict)
+    {
+        LetterBoxView lbv = GetComponent<LetterBoxView>();
+        if (dict.hasGlyph(m_glyph))
+        {
+            char letter = dict.getLetter(m_glyph);
+            lbv.SetLetter(letter);
+        }
+        else
+            lbv.SetLetter(GlyphDictionary.UNKNOWN_GLYPH_CHAR);
+            
+    }
+	
     public void OnPointerDown()
     {
-        Debug.Log("mouse down");
     }
 
     public void OnPointerUp()
@@ -25,11 +40,8 @@ public class PuzzleLetterView : MonoBehaviour {
         LetterBoxView letter = m_letterPanel.findLetterAtPos(transform.position);
         if (letter)
         {
-            GetComponent<LetterBoxView>().m_letter = letter.m_letter;
-            GetComponent<LetterBoxView>().m_text.text = letter.m_letter; // HACK
+            Game.Instance.setPlayerGlyph(letter.m_letter[0], m_glyph);
         }
-
-        Debug.Log("mouse down");
         transform.position = m_startPosition;
     }
 
@@ -37,4 +49,7 @@ public class PuzzleLetterView : MonoBehaviour {
     {
         transform.position = Input.mousePosition;
     }
+
+    private Vector3 m_startPosition;
+    private Glyph m_glyph;
 }

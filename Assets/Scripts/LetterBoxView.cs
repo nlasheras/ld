@@ -19,4 +19,10 @@ public class LetterBoxView : MonoBehaviour {
     {
 	
 	}
+
+    public void SetLetter(char letter)
+    {
+        m_letter = letter.ToString();
+        m_text.text = m_letter;
+    }
 }

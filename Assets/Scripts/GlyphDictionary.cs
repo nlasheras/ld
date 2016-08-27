@@ -11,12 +11,40 @@ public class GlyphDictionary
         var ret = new List<Glyph>();
         foreach (char c in text)
         {
-            if (m_translations.ContainsKey(c))
-                ret.Add(m_translations[c]);
-            else
-                ret.Add(m_translations[UNKNOWN_GLYPH_CHAR]);
+            ret.Add(get(c));
         }
         return ret;
+    }
+
+    public Glyph get(char key)
+    {
+        if (m_translations.ContainsKey(key))
+            return m_translations[key];
+        else
+            return m_translations[UNKNOWN_GLYPH_CHAR];
+    }
+
+    public bool hasGlyph(Glyph g)
+    {
+        return m_translations.ContainsValue(g);
+    }
+
+    public char getLetter(Glyph g)
+    {
+        foreach (var pair in m_translations)
+        {
+            if (pair.Value == g)
+                return pair.Key;
+        }
+        UnityEngine.Debug.LogError("Dictionary doesn't has glyph " + g.VisualId.ToString());
+        return UNKNOWN_GLYPH_CHAR;
+    }
+
+    public void set(char key, Glyph glyph)
+    {
+        if (m_translations.ContainsValue(glyph))
+            m_translations.Remove(getLetter(glyph));
+        m_translations[key] = glyph;
     }
 
     private GlyphDictionary()

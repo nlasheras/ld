@@ -11,6 +11,8 @@ public class PuzzleView : MonoBehaviour
         Game game = Game.Instance;
         game.InitPuzzle();
 
+        m_glyphs = new List<PuzzleLetterView>();
+
         Puzzle puzzle = game.currentPuzzle;
         float currentX = -100;
         float currentY = 0;
@@ -23,21 +25,30 @@ public class PuzzleView : MonoBehaviour
             PuzzleLetterView plv = newObj.GetComponent<PuzzleLetterView>();
             LetterBoxView lbv = newObj.GetComponent<LetterBoxView>();
 
-            lbv.m_letter = glyph.Letter.ToString();
-            lbv.m_text.text = glyph.Letter.ToString();
+            plv.Init(glyph);
 
             newObj.transform.SetParent(m_panel.transform);
             RectTransform newTransform = newObj.GetComponent<RectTransform>();
             newTransform.localPosition = new Vector2(currentX, currentY);
 
             currentX += newObj.GetComponent<RectTransform>().rect.width;
+
+            m_glyphs.Add(plv);
         }
 
         m_prefab.gameObject.SetActive(false);
+
+        Game.onPlayerDictUpdated += OnPlayerDictUpdated;
 	}
 
-	void Update()
+	void OnPlayerDictUpdated(GlyphDictionary dict)
 	{
+        foreach (var glyph in m_glyphs)
+        {
+            glyph.UpdateWithDictionary(dict);
+        }
 	}
+
+    private List<PuzzleLetterView> m_glyphs;
 
 }
