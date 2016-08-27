@@ -36,7 +36,14 @@ public class PuzzleView : MonoBehaviour
 
         m_question.text = puzzle.Definition.Question;
 
-        float currentX = -100;
+        float itemWidth = m_prefab.GetComponent<RectTransform>().rect.width;
+        const float itemSeparationX = 8.0f;
+        float panelWidth = m_panel.GetComponent<RectTransform>().rect.width;
+        float answerWidth = puzzle.Glyphs.Count * itemWidth + (puzzle.Glyphs.Count - 1) * itemSeparationX;
+
+        float offsetX = (panelWidth - answerWidth) * 0.5f;
+
+        float currentX = -panelWidth / 2.0f + offsetX;
         float currentY = 0;
         int count = 0;
         foreach (var glyph in puzzle.Glyphs)
@@ -51,9 +58,9 @@ public class PuzzleView : MonoBehaviour
 
             newObj.transform.SetParent(m_panel.transform);
             RectTransform newTransform = newObj.GetComponent<RectTransform>();
-            newTransform.localPosition = new Vector2(currentX, currentY);
+            newTransform.localPosition = new Vector2(currentX + itemWidth * 0.5f, currentY);
 
-            currentX += newObj.GetComponent<RectTransform>().rect.width;
+            currentX += itemWidth + itemSeparationX;
 
             m_glyphs.Add(plv);
         }

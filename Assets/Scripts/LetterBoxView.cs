@@ -12,7 +12,6 @@ public class LetterBoxView : MonoBehaviour {
 	void Start ()
     {
         m_text.text = m_letter;
-        //m_glyph.enabled = false;
 	}
 	
 	void Update ()

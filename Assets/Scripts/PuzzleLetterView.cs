@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class PuzzleLetterView : MonoBehaviour
 {
     public LetterPanelView m_letterPanel;
-    
+
 	void Start()
     {
         m_startPosition = transform.position;
@@ -39,17 +38,19 @@ public class PuzzleLetterView : MonoBehaviour
 
     public void OnPointerUp()
     {
-        LetterBoxView letter = m_letterPanel.findLetterAtPos(transform.position);
+        LetterBoxView lbv = GetComponent<LetterBoxView>();
+        LetterBoxView letter = m_letterPanel.findLetterAtPos(lbv.m_glyph.transform.position);
         if (letter)
         {
             Game.Instance.setPlayerGlyph(letter.m_letter[0], m_glyph);
         }
-        transform.position = m_startPosition;
+        lbv.m_glyph.transform.position = m_startPosition;
     }
 
     public void OnDrag()
     {
-        transform.position = Input.mousePosition;
+        LetterBoxView lbv = GetComponent<LetterBoxView>();
+        lbv.m_glyph.transform.position = Input.mousePosition;
     }
 
     private Vector3 m_startPosition;

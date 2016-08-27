@@ -14,11 +14,18 @@ public class LetterPanelView : MonoBehaviour {
         Rect parentRect = m_panel.GetComponent<RectTransform>().rect;
         int left = (int)(-parentRect.width / 2);
         int top = (int)(parentRect.height / 2);
-        float currentX = left;
-        float currentY = top;
 
         float itemWidth = m_prefab.GetComponent<RectTransform>().rect.width;
         float itemHeight = m_prefab.GetComponent<RectTransform>().rect.height;
+
+        float itemSeparation = 8;
+
+        int itemsPerRow = (int)(parentRect.width / (itemWidth + itemSeparation));
+        float contentWidth = itemsPerRow * itemWidth + (itemsPerRow - 1) * itemSeparation;
+        float offsetX = (parentRect.width - contentWidth) * 0.5f;
+
+        float currentX = left + offsetX;
+        float currentY = top - itemSeparation;
 
 	    for (char c = 'a'; c <= 'z'; ++c)
         {
@@ -33,12 +40,12 @@ public class LetterPanelView : MonoBehaviour {
             RectTransform newTransform = newObj.GetComponent<RectTransform>();
             newTransform.localPosition = new Vector2(currentX + itemWidth/2, currentY - itemHeight/2);
 
-            currentX += itemWidth;
+            currentX += itemWidth + itemSeparation;
 
             if (currentX + itemWidth > parentRect.width/2)
             {
-                currentX = left;
-                currentY -= itemHeight;
+                currentX = left + offsetX;
+                currentY -= itemHeight + itemSeparation;
             }
 
             m_letters.Add(lbv);
