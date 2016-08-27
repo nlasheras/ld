@@ -44,10 +44,17 @@ public class LetterPanelView : MonoBehaviour {
             m_letters.Add(lbv);
         }
         m_prefab.gameObject.SetActive(false);
+
+        Game.onPlayerDictUpdated += OnPlayerDictUpdated;
 	}
 	
-	void Update () {
-	
+	void OnPlayerDictUpdated(GlyphDictionary dict)
+    {
+	    foreach (var lbv in m_letters)
+        {
+            Glyph g = dict.get(lbv.m_letter[0]);
+            lbv.m_glyph.sprite = GlyphVisuals.Instance.GetVisual(g.VisualId);
+        }
 	}
 
     public LetterBoxView findLetterAtPos(Vector3 pos)
@@ -62,5 +69,6 @@ public class LetterPanelView : MonoBehaviour {
         return null;
     }
 
+    
     private List<LetterBoxView> m_letters;
 }

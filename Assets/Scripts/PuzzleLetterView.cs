@@ -16,6 +16,8 @@ public class PuzzleLetterView : MonoBehaviour
 
         LetterBoxView lbv = GetComponent<LetterBoxView>();
         lbv.SetLetter(GlyphDictionary.UNKNOWN_GLYPH_CHAR);
+
+        lbv.m_glyph.sprite = GlyphVisuals.Instance.GetVisual(glyph.VisualId);
     }
 
     public void UpdateWithDictionary(GlyphDictionary dict)

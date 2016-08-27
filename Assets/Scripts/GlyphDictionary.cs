@@ -64,7 +64,7 @@ public class GlyphDictionary
         var dict = new GlyphDictionary();
 
         // TODO: shuffle glyphs!
-        int id = 1;
+        int id = 2;
         for (char c = 'a'; c <= 'z'; ++c)
         {
             dict.m_translations[c] = new Glyph(c, id++);
