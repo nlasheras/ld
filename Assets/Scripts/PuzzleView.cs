@@ -1,19 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class PuzzleView : MonoBehaviour
 {
     public GameObject m_panel;
     public PuzzleLetterView m_prefab;
-    
+
+    public Button m_prevPuzzle;
+    public Button m_nextPuzzle;
+
     void Start()
-	{
+    {
         Game game = Game.Instance;
-        game.InitPuzzle();
+
+        Game.onPuzzleChanged += OnPuzzleChanged;
+        Game.onPlayerDictUpdated += OnPlayerDictUpdated;
 
         m_glyphs = new List<PuzzleLetterView>();
 
-        Puzzle puzzle = game.currentPuzzle;
+        game.InitPuzzles(); // TODO: find a better place for initialization!
+    }
+
+    void OnPuzzleChanged(Puzzle puzzle)
+    {
+        foreach (var glyph in m_glyphs)
+        {
+            Destroy(glyph.gameObject);
+        }
+        m_glyphs.Clear();
+
+        m_prefab.gameObject.SetActive(true);
+
         float currentX = -100;
         float currentY = 0;
         int count = 0;
@@ -38,7 +56,10 @@ public class PuzzleView : MonoBehaviour
 
         m_prefab.gameObject.SetActive(false);
 
-        Game.onPlayerDictUpdated += OnPlayerDictUpdated;
+        m_prevPuzzle.gameObject.SetActive(Game.Instance.CurrentPuzzleIndex > 0);
+        m_nextPuzzle.gameObject.SetActive(Game.Instance.CurrentPuzzleIndex < Game.Instance.PuzzleCount-1);
+
+        OnPlayerDictUpdated(Game.Instance.playerDict);
 	}
 
 	void OnPlayerDictUpdated(GlyphDictionary dict)
@@ -48,6 +69,13 @@ public class PuzzleView : MonoBehaviour
             glyph.UpdateWithDictionary(dict);
         }
 	}
+
+    public void ChangePuzzle(int direction)
+    {
+        Game game = Game.Instance;
+        int newIndex = game.CurrentPuzzleIndex + direction;
+        game.ShowPuzzle(newIndex);
+    }
 
     private List<PuzzleLetterView> m_glyphs;
 
