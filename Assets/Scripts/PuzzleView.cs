@@ -10,6 +10,8 @@ public class PuzzleView : MonoBehaviour
     public Button m_prevPuzzle;
     public Button m_nextPuzzle;
 
+    public Text m_question;
+
     void Start()
     {
         Game game = Game.Instance;
@@ -32,10 +34,12 @@ public class PuzzleView : MonoBehaviour
 
         m_prefab.gameObject.SetActive(true);
 
+        m_question.text = puzzle.Definition.Question;
+
         float currentX = -100;
         float currentY = 0;
         int count = 0;
-        foreach (var glyph in puzzle.glyphs)
+        foreach (var glyph in puzzle.Glyphs)
         {
             GameObject newObj = Instantiate(m_prefab.gameObject);
 

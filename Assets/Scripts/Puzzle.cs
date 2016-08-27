@@ -2,14 +2,23 @@
 
 public class Puzzle
 {
-    private string m_answer;
-
-    public Puzzle(string answer)
+    public Puzzle(PuzzleDefinition def)
 	{
-        m_answer = answer;
-
-        glyphs = Game.Instance.puzzleDict.toGlyphs(answer);
+        Definition = def;
+        Glyphs = Game.Instance.puzzleDict.toGlyphs(def.Answer);
 	}
 
-    public List<Glyph> glyphs { get; private set; }
+    public bool checkFinished(GlyphDictionary dict)
+    {
+        foreach (var glyph in Glyphs)
+        {
+            var playerGuess = dict.get(glyph.Letter);
+            if (playerGuess.VisualId != glyph.VisualId)
+                return false;
+        }
+        return true;
+    }
+
+    public List<Glyph> Glyphs { get; private set; }
+    public PuzzleDefinition Definition { get; private set; }
 }

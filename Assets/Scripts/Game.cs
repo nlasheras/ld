@@ -28,21 +28,22 @@ public class Game
 
     public void InitPuzzles()
     {
-        m_puzzleAnswers = new List<string>();
-        m_puzzleAnswers.Add("foobar");
-        m_puzzleAnswers.Add("zanguango");
-        m_puzzleAnswers.Add("nacho");
-        m_puzzleAnswers.Add("siisbai");
-        m_puzzleAnswers.Add("perita");
+        m_puzzles = new List<PuzzleDefinition>();
+        m_puzzles.Add(new PuzzleDefinition("Oro parece, plata no es", "platano"));
+        m_puzzles.Add(new PuzzleDefinition("Esto es muy guay", "perita"));
+        m_puzzles[m_puzzles.Count - 1].UnlocksCount = 3;
+        m_puzzles.Add(new PuzzleDefinition("It truly makes the most beautiful music", "silence"));
+
+        m_unlockedCount = 2;
 
         ShowPuzzle(0);
     }
 
     public void ShowPuzzle(int index)
     {
-        if (index >= 0 && index < m_puzzleAnswers.Count)
+        if (index >= 0 && index < m_puzzles.Count)
         {
-            currentPuzzle = new Puzzle(m_puzzleAnswers[index]);
+            currentPuzzle = new Puzzle(m_puzzles[index]);
             CurrentPuzzleIndex = index;
 
             onPuzzleChanged(currentPuzzle);
@@ -50,18 +51,30 @@ public class Game
     }
 
     public int CurrentPuzzleIndex { get; private set; } 
-    public int PuzzleCount { get { return m_puzzleAnswers.Count; } }
+    public int PuzzleCount { get { return m_unlockedCount; } }
 
     public void setPlayerGlyph(char letter, Glyph glyph)
     {
         playerDict.set(letter, glyph);
 
         onPlayerDictUpdated(playerDict);
+
+        if (currentPuzzle.checkFinished(playerDict))
+        {
+            if (currentPuzzle.Definition.UnlocksCount > m_unlockedCount)
+            {
+                m_unlockedCount = currentPuzzle.Definition.UnlocksCount;
+
+                // HACK: to update buttons
+                onPuzzleChanged(currentPuzzle);
+            }
+        }
     }
 
     public GlyphDictionary playerDict { get; private set; }
     public GlyphDictionary puzzleDict { get; private set; }
     public Puzzle currentPuzzle { get; private set; }
 
-    private List<string> m_puzzleAnswers;
+    private List<PuzzleDefinition> m_puzzles;
+    private int m_unlockedCount;
 }
