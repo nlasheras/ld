@@ -11,14 +11,14 @@ public class GlyphVisuals : MonoBehaviour
     {
         get
         {
-            Debug.Assert(sm_instance != null);
+            if (sm_instance == null)
+                sm_instance = FindObjectOfType<GlyphVisuals>();
             return sm_instance;
         }
     }
 
     void Start()
 	{
-        Debug.Assert(sm_instance == null, "There can be only one GlyphVisuals per scene");
         sm_instance = this;       
 	}
 
