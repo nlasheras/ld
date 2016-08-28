@@ -29,12 +29,20 @@ public class Game
     public void InitPuzzles()
     {
         m_puzzles = new List<PuzzleDefinition>();
-        m_puzzles.Add(new PuzzleDefinition("Oro parece, plata no es", "platano"));
-        m_puzzles.Add(new PuzzleDefinition("Esto es muy guay", "perita"));
-        m_puzzles[m_puzzles.Count - 1].UnlocksCount = 3;
-        m_puzzles.Add(new PuzzleDefinition("It truly makes the most beautiful music", "silence"));
 
-        m_unlockedCount = 2;
+        m_puzzles.Add(new PuzzleDefinition("I saw here there for the first time", "nile"));
+        m_puzzles.Add(new PuzzleDefinition("She was a beautiful gazelle, destined to end with a", "lion"));
+        m_puzzles.Add(new PuzzleDefinition("But almost a kid, I didn't understand ", "love"));
+        m_puzzles.Add(new PuzzleDefinition("Whould she mind?", "slave"));
+        m_unlockedCount = m_puzzles.Count;
+        m_puzzles[m_puzzles.Count - 1].UnlocksCount = 6;
+        m_puzzles.Add(new PuzzleDefinition("I was close to the lion, building his final place", "mausoleum"));
+        m_puzzles.Add(new PuzzleDefinition("With the time I had left I only had one option", "choosedeath"));
+        m_puzzles[m_puzzles.Count - 1].UnlocksCount = 8;
+        m_puzzles.Add(new PuzzleDefinition("I never spoke to her before, so my first words to her were my lasts", "papyrus"));
+        m_puzzles.Add(new PuzzleDefinition("So, with that in mind what else could I ask but", "forgiveness"));
+        m_puzzles[m_puzzles.Count - 1].UnlocksCount = 9;
+        m_puzzles.Add(new PuzzleDefinition("This was the story of the digger and Delila", "thankyou"));
 
         ShowPuzzle(0);
     }
@@ -64,6 +72,8 @@ public class Game
             if (currentPuzzle.Definition.UnlocksCount > m_unlockedCount)
             {
                 m_unlockedCount = currentPuzzle.Definition.UnlocksCount;
+
+                SoundManager.Instance.PlaySound(SoundEffect.UnlockPuzzles);
 
                 // HACK: to update buttons
                 onPuzzleChanged(currentPuzzle);
