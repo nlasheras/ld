@@ -3,7 +3,8 @@ using System.Collections;
 
 public enum SoundEffect
 {
-    UnlockPuzzles
+    UnlockPuzzles,
+    OSError
 }
 
 public class SoundManager : MonoBehaviour 
@@ -12,6 +13,7 @@ public class SoundManager : MonoBehaviour
     private AudioSource m_audioSource;
 
     public AudioClip m_unlockPuzzles;
+    public AudioClip m_osError;
 
     public static SoundManager Instance
     {
@@ -45,6 +47,7 @@ public class SoundManager : MonoBehaviour
         switch(fx)
         {
             case SoundEffect.UnlockPuzzles: return m_unlockPuzzles;
+            case SoundEffect.OSError: return m_osError;
         }
         return null;
     }

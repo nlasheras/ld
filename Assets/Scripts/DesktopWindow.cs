@@ -28,7 +28,10 @@ public class DesktopWindow : MonoBehaviour
 
     public void OnGameIconClick()
     {
-        if (!m_gameIconEasterEggShown && m_gameIconText != null) 
+        if (!m_gameIconEasterEggShown && m_gameIconText != null)
             StartCoroutine(GameIconClick());
+        else
+            SoundManager.Instance.PlaySound(SoundEffect.OSError);
+
     }
 }
