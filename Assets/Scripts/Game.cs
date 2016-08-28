@@ -8,6 +8,9 @@ public class Game
     public delegate void OnPuzzleChanged(Puzzle puzzle);
     public static event OnPuzzleChanged onPuzzleChanged;
 
+    public delegate void OnGameFinised();
+    public static event OnGameFinised onGameFinished;
+
     // Singleton implementation
     private static Game sm_instance;
     public static Game Instance
@@ -77,6 +80,12 @@ public class Game
 
                 // HACK: to update buttons
                 onPuzzleChanged(currentPuzzle);
+            }
+            if (CurrentPuzzleIndex == m_puzzles.Count - 1)
+            {
+                SoundManager.Instance.PlaySound(SoundEffect.UnlockPuzzles);
+
+                onGameFinished();
             }
         }
     }

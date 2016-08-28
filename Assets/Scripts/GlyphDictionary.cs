@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using UnityEngine; 
+
 public class GlyphDictionary
 {
     public readonly static char UNKNOWN_GLYPH_CHAR = '?';
@@ -63,14 +65,46 @@ public class GlyphDictionary
     {
         var dict = new GlyphDictionary();
 
-        // TODO: shuffle glyphs!
+        initSeed();
+
+        // Generate a list of possible ids
         int id = 2;
+        List<int> tmp = new List<int>();
         for (char c = 'a'; c <= 'z'; ++c)
         {
-            dict.m_translations[c] = new Glyph(c, id++);
+            tmp.Add(id++);
+        }
+
+        for (char c = 'a'; c <= 'z'; ++c)
+        {
+            int index = Random.Range(0, tmp.Count);
+            int randomId = tmp[index];
+            tmp.RemoveAt(index);
+
+            dict.m_translations[c] = new Glyph(c, randomId);
         }
 
         return dict;
+    }
+
+    public static readonly string RANDOM_SEED_KEY = "RandomSeed";
+
+    private static void initSeed()
+    {
+        int seed = 0;
+        if (PlayerPrefs.HasKey(RANDOM_SEED_KEY))
+        {
+            seed = PlayerPrefs.GetInt(RANDOM_SEED_KEY);
+        }
+        else
+        {
+            System.DateTime epochStart = new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
+            int epochSecs = (int)(System.DateTime.UtcNow - epochStart).TotalSeconds;
+            seed = epochSecs;
+            PlayerPrefs.SetInt(RANDOM_SEED_KEY, seed);
+        }
+
+        Random.InitState(seed);
     }
 
 }
